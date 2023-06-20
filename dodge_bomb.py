@@ -6,6 +6,14 @@ WIDTH, HEIGHT = 1600, 900
 
 key_dict = {pg.K_UP:(0, -5), pg.K_DOWN:(0, +5), pg.K_LEFT:(-5, 0),pg.K_RIGHT:(+5,0)}
 
+def check_bound(rect: pg.rect)-> tuple[bool, bool]:
+    yoko, tate = True , True
+    if rect.left < 0 or WIDTH < rect.right:
+        yoko = False
+    if rect.top < 0 or HEIGHT < rect.bottom:
+        tate = False
+    return yoko ,tate
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -37,14 +45,23 @@ def main():
         screen.blit(bom_r, bom_rct)
         bom_rct.move_ip((vx,vy))
         key_lst = pg.key.get_pressed()
+        sum_mv = [0 ,0]
         for k, mv in key_dict.items():
             if key_lst[k]:
-                kk_rct.move_ip(mv)
-
+                sum_mv[0] += mv[0]
+                sum_mv[1] += mv[1]
+        kk_rct.move_ip(sum_mv)
+        if check_bound(kk_rct) != (True, True):
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
+        yoko, tate = check_bound(bom_rct)
+        if not yoko:
+            vx *= -1
+        if not tate:
+            vy *= -1
         pg.display.update()
         tmr += 1
         clock.tick(50)
-
+        
 
 if __name__ == "__main__":
     pg.init()
