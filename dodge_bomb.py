@@ -44,19 +44,19 @@ def main():
     kk_rct = kk_img.get_rect()
     kk_rct.center = [900, 400]
     bom_r = pg.Surface((20, 20))
-    bom_rct = bom_r.get_rect()
-    bom_rs = []
+    bom_rect = bom_r.get_rect()
+    bom_r_lst = []
     for r in range(1, 11):
         bom_r = pg.Surface((20*r, 20*r))
         pg.draw.circle(bom_r, (255, 0, 0), (10*r, 10*r), 10*r)
         bom_r.set_colorkey((0, 0, 0))
-        bom_rs.append(bom_r)
+        bom_r_lst.append(bom_r)
 
     
     
     bom_rx = random.randint(0, WIDTH - 20)
     bom_ry = random.randint(0, HEIGHT - 20)
-    bom_rct.center = bom_rx, bom_ry
+    bom_rect.center = bom_rx, bom_ry
     clock = pg.time.Clock()
     tmr = 0
     vx = 5
@@ -72,7 +72,7 @@ def main():
             if event.type == pg.QUIT: 
                 return
         # ゲームオーバー判定
-        if kk_rct.colliderect(bom_rct):
+        if kk_rct.colliderect(bom_rect):
             print("ゲームオーバー")
             screen.blit(bg_img, [0, 0])
             screen.blit(kk_img_pien, kk_rct)
@@ -80,7 +80,7 @@ def main():
             clock.tick(0.3)
             return
 
-        bom_r = bom_rs[min(tmr//500, 9)]
+        bom_r = bom_r_lst[min(tmr//500, 9)]
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0 ,0]
@@ -92,18 +92,18 @@ def main():
         
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img_dict[tuple(sum_mv)], kk_rct)
-        screen.blit(bom_r, bom_rct)
+        screen.blit(bom_r, bom_rect)
 
         # スコアを表示（追加機能１）
         score = fonto.render(f"score{score1}", True,(255, 255, 255))
         screen.blit(score,[50,50])
 
         kk_rct.move_ip(sum_mv)
-        bom_rct.move_ip((vx,vy))
+        bom_rect.move_ip((vx,vy))
         
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
-        yoko, tate = check_bound(bom_rct)
+        yoko, tate = check_bound(bom_rect)
         if not yoko:
             vx *= -1
         if not tate:
