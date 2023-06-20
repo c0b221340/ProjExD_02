@@ -21,6 +21,8 @@ def main():
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_img_flip = pg.transform.flip(kk_img, True, False)
+    
+    # いろいろなこうかとんが入った辞書
     kk_img_dict = {
         (0,0): pg.transform.rotozoom(kk_img, 0,1.0),
         (0, -5): pg.transform.rotozoom(kk_img_flip, 90,1.0),
@@ -34,18 +36,24 @@ def main():
         }
     kk_rct = kk_img.get_rect()
     kk_rct.center = [900, 400]
-    bom_r = pg.Surface((20,20))
-    pg.draw.circle(bom_r,(255, 0, 0),(10,10),10)
-    bom_r.set_colorkey((0, 0, 0))
+    bom_r = pg.Surface((20, 20))
+    bom_rct = bom_r.get_rect()
+    bom_rs = []
+    for r in range(1, 11):
+        bom_r = pg.Surface((20*r, 20*r))
+        pg.draw.circle(bom_r, (255, 0, 0), (10*r, 10*r), 10*r)
+        bom_r.set_colorkey((0, 0, 0))
+        bom_rs.append(bom_r)
+        
+    
+    
     bom_rx = random.randint(0, WIDTH - 20)
     bom_ry = random.randint(0, HEIGHT - 20)
-    bom_rct = bom_r.get_rect()
     bom_rct.center = bom_rx, bom_ry
     clock = pg.time.Clock()
     tmr = 0
     vx = 5
     vy = 5
-    
     # print(f"{bom_rx},{bom_ry}")
     while True:
         for event in pg.event.get():
@@ -54,6 +62,8 @@ def main():
         if kk_rct.colliderect(bom_rct):
             print("ゲームオーバー")
             return
+
+        bom_r = bom_rs[min(tmr//500, 9)]
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0 ,0]
@@ -79,6 +89,7 @@ def main():
             vy *= -1
         pg.display.update()
         tmr += 1
+        
         clock.tick(50)
         
 
