@@ -1,6 +1,6 @@
 import sys
 import pygame as pg
-
+import random 
 
 WIDTH, HEIGHT = 1600, 900
 
@@ -11,8 +11,14 @@ def main():
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    bom_r = pg.Surface((20,20))
+    pg.draw.circle(bom_r,(255, 0, 0),(10,10),10)
+    bom_r.set_colorkey((0, 0, 0))
+    bom_rx = random.randint(0, WIDTH - 20)
+    bom_ry = random.randint(0, HEIGHT - 20)
     clock = pg.time.Clock()
     tmr = 0
+    print(f"{bom_rx},{bom_ry}")
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -20,6 +26,7 @@ def main():
 
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, [900, 400])
+        screen.blit(bom_r, [bom_rx, bom_ry])
         pg.display.update()
         tmr += 1
         clock.tick(10)
