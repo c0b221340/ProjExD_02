@@ -51,7 +51,7 @@ def main():
         pg.draw.circle(bom_r, (255, 0, 0), (10*r, 10*r), 10*r)
         bom_r.set_colorkey((0, 0, 0))
         bom_rs.append(bom_r)
-        
+
     
     
     bom_rx = random.randint(0, WIDTH - 20)
@@ -61,13 +61,17 @@ def main():
     tmr = 0
     vx = 5
     vy = 5
-
+    # スコアの設定
+    score1 = 0
+    fonto = pg.font.Font(None, 80)
+    
+    
 
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-        
+        # ゲームオーバー判定
         if kk_rct.colliderect(bom_rct):
             print("ゲームオーバー")
             screen.blit(bg_img, [0, 0])
@@ -90,6 +94,10 @@ def main():
         screen.blit(kk_img_dict[tuple(sum_mv)], kk_rct)
         screen.blit(bom_r, bom_rct)
 
+        # スコアを表示（追加機能１）
+        score = fonto.render(f"score{score1}", True,(255, 255, 255))
+        screen.blit(score,[50,50])
+
         kk_rct.move_ip(sum_mv)
         bom_rct.move_ip((vx,vy))
         
@@ -102,6 +110,7 @@ def main():
             vy *= -1
         pg.display.update()
         tmr += 1
+        score1 += 1
         
         clock.tick(50)
         
